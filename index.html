@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mach Cone TDOA Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Bullet TDOA Simulator</h1>
+  <p class="subtitle">Click on the grid to place bullet perpendicular to the mic array.</p>
+  <canvas id="sim"></canvas>
+
+  <div id="data-panel">
+    <div id="arrival-panel">
+      <div class="section-title">Arrival Times</div>
+      <div>Mic 1: <span id="t1" class="waiting">&mdash;</span></div>
+      <div>Mic 2: <span id="t2" class="waiting">&mdash;</span></div>
+      <div>Mic 3: <span id="t3" class="waiting">&mdash;</span></div>
+    </div>
+    <div id="tdoa-panel">
+      <div class="section-title">TDOA (differences)</div>
+      <div>&Delta;t (M2 &minus; M1): <span id="d12" class="waiting">&mdash;</span></div>
+      <div>&Delta;t (M3 &minus; M1): <span id="d13" class="waiting">&mdash;</span></div>
+      <div>&Delta;t (M3 &minus; M2): <span id="d23" class="waiting">&mdash;</span></div>
+    </div>
+  </div>
+  <div id="info">Speed of sound: 343 m/s &nbsp;|&nbsp; Grid: 10 m &times; 10 m &nbsp;|&nbsp; Mic spacing: 2 m</div>
+
+  <script src="sim.js"></script>
+</body>
+</html>
