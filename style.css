@@ -8,41 +8,69 @@ body {
   font-family: Arial, sans-serif;
   background: #fff;
   color: #333;
-  padding: 20px;
+  min-height: 100vh;
+  padding: 20px 24px;
+}
+
+#page-layout {
+  display: grid;
+  grid-template-columns: 280px auto 280px;
+  align-items: start;
+  width: 100%;
+  min-height: calc(100vh - 40px);
+}
+
+#left-column {
+  justify-self: start;
+  align-self: start;
+}
+
+#center-column {
+  justify-self: center;
+  align-self: start;
+}
+
+#right-spacer {
+  width: 280px;
 }
 
 h1 {
   font-size: 16px;
   margin-bottom: 4px;
+  text-align: left;
 }
 
 .subtitle {
   font-size: 12px;
   color: #888;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  text-align: left;
+  line-height: 1.4;
 }
 
 canvas {
   border: 1px solid #ccc;
   cursor: crosshair;
   display: block;
+  background: #fff;
 }
 
 #data-panel {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 16px;
   font-size: 13px;
-  font-family: Arial, sans-serif;
 }
 
-#data-panel div {
+#arrival-panel div,
+#tdoa-panel div {
   line-height: 1.8;
 }
 
 .section-title {
   font-weight: bold;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .hit {
@@ -55,7 +83,28 @@ canvas {
 }
 
 #info {
-  margin-top: 10px;
+  margin-top: 16px;
   font-size: 11px;
   color: #999;
+  line-height: 1.6;
+}
+
+/* Responsive fallback for narrower screens */
+@media (max-width: 950px) {
+  #page-layout {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+  }
+
+  #left-column {
+    justify-self: start;
+  }
+
+  #center-column {
+    justify-self: start;
+  }
+
+  #right-spacer {
+    display: none;
+  }
 }

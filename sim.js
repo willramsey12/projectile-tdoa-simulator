@@ -2,10 +2,10 @@
 // CONFIGURATION
 // ============================================
 const SPEED_OF_SOUND = 343;   // m/s
-const TIME_SCALE = 0.01;      // 100x slower than real time
-const GRID_M = 10;            // 10m x 10m grid
-const PX_PER_M = 50;          // pixels per meter
-const MIC_SPACING_M = 3;      // meters between mics
+const TIME_SCALE = 0.005;      // 200x slower than real time
+const GRID_M = 4;            // Xm x Ym grid
+const PX_PER_M = 150;          // pixels per meter
+const MIC_SPACING_M = 1;      // meters between mics
 
 // ============================================
 // LAYOUT
@@ -36,18 +36,19 @@ function mToCanvasY(my) { return originY - my * PX_PER_M; }
 function canvasToMx(px) { return (px - originX) / PX_PER_M; }
 function canvasToMy(py) { return (originY - py) / PX_PER_M; }
 function mToPx(m)       { return m * PX_PER_M; }
+function snap(value, step) { return Math.round(value / step) * step; }
 
 function distM(x1, y1, x2, y2) {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
 // ============================================
-// MICROPHONES  (centered at x=5, spaced 2m)
+// MICROPHONES
 // ============================================
 const mics = [
-  { mx: 2, my: 0, label: 'M1' },
-  { mx: 5, my: 0, label: 'M2' },
-  { mx: 8, my: 0, label: 'M3' },
+  { mx: 1, my: 0, label: 'M1' },
+  { mx: 2, my: 0, label: 'M2' },
+  { mx: 3, my: 0, label: 'M3' },
 ];
 
 // ============================================
@@ -69,9 +70,8 @@ function drawGrid() {
 
   // Grid lines every 1m
   for (let i = 0; i <= GRID_M; i++) {
-    const major = (i % 5 === 0);
-    ctx.strokeStyle = major ? '#ccc' : '#eee';
-    ctx.lineWidth = major ? 1 : 0.5;
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
 
     const px = mToCanvasX(i);
     ctx.beginPath(); ctx.moveTo(px, MARGIN_TOP); ctx.lineTo(px, originY); ctx.stroke();
@@ -105,7 +105,7 @@ function drawGrid() {
     ctx.fillText(i, originX - 8, mToCanvasY(i));
   }
 
-  // Y-axis label (rotated)
+  // Y-axis label
   ctx.save();
   ctx.translate(16, MARGIN_TOP + GRID_PX / 2);
   ctx.rotate(-Math.PI / 2);
@@ -258,8 +258,10 @@ function frame() {
   mics.forEach((mic, i) => {
     if (hitTimes[i] === null) {
       const d = distM(bullet.mx, bullet.my, mic.mx, mic.my);
-      if (radiusM >= d) {
-        hitTimes[i] = simTime;
+      const tHit = d / SPEED_OF_SOUND;
+
+      if (simTime >= tHit) {
+        hitTimes[i] = tHit;
         changed = true;
       }
     }
@@ -291,8 +293,11 @@ canvas.addEventListener('click', function (e) {
   const cx = (e.clientX - rect.left) * (W / rect.width);
   const cy = (e.clientY - rect.top) * (H / rect.height);
 
-  const mx = canvasToMx(cx);
-  const my = canvasToMy(cy);
+  let mx = canvasToMx(cx);
+  let my = canvasToMy(cy);
+
+  mx = snap(mx, 0.01);   // nearest centimeter
+  my = snap(my, 0.01);
 
   if (mx < 0 || mx > GRID_M || my < 0.2 || my > GRID_M) return;
 
