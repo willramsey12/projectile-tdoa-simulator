@@ -89,7 +89,7 @@ canvas {
   line-height: 1.6;
 }
 
-/* Responsive fallback for narrower screens */
+/* for narrower screens */
 @media (max-width: 950px) {
   #page-layout {
     grid-template-columns: 1fr;
